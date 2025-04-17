@@ -1,9 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Avg
 
 # Create your models here.
-
-
 # Autor del libro 
 class AutorLibro(models.Model):
     nombre = models.CharField(max_length=100)
@@ -25,6 +24,9 @@ class Libro(models.Model):
     def __str__(self):
         return self.titulo
     
+    def promedio_puntuacion(self):
+        promedio = self.resenas.aggregate(Avg('puntuacion'))['puntuacion__avg']
+        return round(promedio or 0)
 
 # Reseña del libro
 class Resena(models.Model):

@@ -11,6 +11,10 @@
     rel="stylesheet"
   />
 
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <!-- CSS -->
   <style>
     body {
@@ -23,12 +27,12 @@
     }
   </style>
 </head>
-<body>
+<body >
 
   <!-- Barra de navegación -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top border-bottom border-bottom border-warning">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'index' %}">📚 Mi Blog</a>
+      <a class="navbar-brand" href="{% url 'index' %}">📚 Mi Blog 💛 de reseña de Libros</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -64,6 +68,7 @@
 
   <!-- Contenido principal -->
   <main class="container mt-5 pt-5">
+    {% block content_title %}{% endblock content_title %}
     {% block content %}
     <!-- El contenido específico de cada página irá aquí -->
     {% endblock %}
@@ -71,9 +76,10 @@
 
 
    <!-- Footer -->
-   <footer class="bg-dark text-white text-center py-3 mt-auto">
+   <footer class="bg-dark text-white text-center py-3 mt-auto border-top border-top border-warning">
     <div class="container">
-      <p class="mb-0">© 2025 Mi Blog de Libros | Hecho con 💛 por Cecilia</p>
+      <p class="mb-0">© 2025 Mi Blog de Libros | Hecho con 💛 por <a href="https://www.linkedin.com/in/cecilia-perdomo/" 
+        style="text-decoration: none; color: white;">Cecilia</a></p>
     </div>
   </footer>
 

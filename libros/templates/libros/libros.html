@@ -11,7 +11,7 @@
         </p>
     </div>
     <div class="mt-4">
-        <a href="{% url 'libros:libros_create' %}" class="btn btn-dark btn-lg">Agregar libros</a>
+        <a href="{% url 'libros:libros_create' %}" class="btn btn-dark btn-lg border border-1 border-warning">Agregar libros</a>
     </div>
 </div>
 <form action="{% url 'libros:post_libros' %}" method="get">
@@ -20,12 +20,14 @@
 
 <table class="table table-bordered">
     <thead>
-        <tr>
+        <tr class="table-dark text-center">
             <th>Portada</th>
-            <th>Nombre del Libro</th>
+            <th>Nombre del libro</th>
             <th>Autor</th>
-            <th>Fecha de Publicación</th>
-            <th>Descripción</th>
+            <th>Fecha de publicación</th>
+            <th>Reseña</th>
+            <th></th>
+            <!-- <th>Descripción</th> -->
             <!-- <th>Agregar tu reseña</th> -->
         </tr>
     </thead>
@@ -34,15 +36,35 @@
         <tr>
             <td class="text-center">
                 {% if libro.portada %}
-                <img src="{{ libro.portada.url }}" alt="{{ libro.titulo }} portada" width="50" height="75">
+                <img src="{{ libro.portada.url }}" alt="{{ libro.titulo }} portada" width="100" height="125">
                 {% else %}
                 <p>No disponible</p>
                 {% endif %}
             </td>
-            <td class="align-middle">{{ libro.titulo }}</td>
+            <td class="align-middle"><strong>{{ libro.titulo }}</strong></td>
             <td class="align-middle">{{ libro.autor_libro.nombre }}</td>
             <td class="align-middle">{{ libro.fecha_publicacion }}</td>
-            <td class="align-middle">{{ libro.descripcion }}</td>
+            <td class="align-middle text-center text-warning">
+                {% if libro.resenas.all %}
+                    {% with promedio=libro.promedio_puntuacion %}
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= promedio %}
+                                <i class="fa fa-star"></i>
+                            {% else %}
+                                <i class="fa fa-star-o"></i>
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                {% else %}
+                    <span class="text-muted">Sin puntuación aún</span>
+                {% endif %}
+            </td>
+            <td class="align-middle text-center">
+                <a class="btn btn-outline-info" href="{% url 'libros:libros_detail' libro.id %}"><i class="fa fa-eye"></i></a>
+                <a class="btn btn-outline-warning" href="{% url 'libros:libros_update' libro.id %}"><i class="fa fa-pen"></i></a>
+                <a class="btn btn-outline-danger" href="{% url 'libros:libros_delete' libro.id %}"><i class="fa fa-trash"></i></a>
+            </td>
+            <!-- <td class="align-middle">{{ libro.descripcion }}</td> -->
             <!-- <td class="align-middle">
                 <a href="{% url 'libros:resena_create' libro.id %}" class="btn btn-dark btn-sm">Crear reseña</a>
             </td> -->

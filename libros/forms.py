@@ -10,7 +10,7 @@ class LibroForm(forms.ModelForm):
             'descripcion': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Descripción del libro'}),
             'autor_libro': forms.Select(attrs={'class': 'form-select'}),
             'fecha_publicacion': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'portada': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
+            'portada': forms.ClearableFileInput(attrs={'class': "form-control", 'type': "file"}),
         }
         labels = {
             'titulo': 'Título',

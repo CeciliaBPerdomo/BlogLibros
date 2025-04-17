@@ -1,0 +1,87 @@
+<!-- template / libros -> libros_detail.html -->
+{% extends "libros/base.html" %}
+{% block title %}Libros → Detalle de libro{% endblock %}
+
+{% block content %}
+<div class="row mb-4 border border-3 border-info rounded p-3 bg-dark">
+    <div class="col-4 text-center">
+        {% if object.portada %}
+        <img src="{{ object.portada.url }}" class="rounded" alt="{{ object.titulo }} portada" width="65%">
+        {% else %}
+        <p>No disponible</p>
+        {% endif %}
+    </div>
+
+    <div class="col d-flex align-items-center">
+        <div class="container">
+            <div class="row mb-3">
+                <div class="col-md-4 d-flex justify-content-center">
+                    <table class="table table-dark table-bordered table-striped text-center w-100">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre del libro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ object.titulo }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4 d-flex justify-content-center">
+                    <table class="table table-dark table-bordered table-striped text-center w-100">
+                        <thead>
+                            <tr>
+                                <th scope="col">Autor del libro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ object.autor_libro }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4 d-flex justify-content-center">
+                    <table class="table table-dark table-bordered table-striped text-center w-100">
+                        <thead>
+                            <tr>
+                                <th scope="col">Fecha de publicación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ object.fecha_publicacion }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 d-flex justify-content-center">
+                    <table class="table table-dark table-bordered table-striped text-center w-100">
+                        <thead>
+                            <tr>
+                                <th scope="col">Descripción del libro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ object.descripcion }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="d-flex justify-content-end mb-4">
+    <a href="{% url 'libros:post_libros' %}" class="btn btn-light border-1 border-secondary w-25">← Volver</a>
+</div>
+{% endblock %}

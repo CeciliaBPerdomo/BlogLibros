@@ -1,8 +1,16 @@
 {% extends "libros/base.html" %}
 {% block title %}Libros → Agregar libros{% endblock %}
 
+
+{% block content_title %} 
+    {% if form.instance.pk %}
+        <h1>Editar libro</h1>
+    {% else %}
+    <h1>Agregar nuevo libro</h1>
+    {% endif %}
+{% endblock content_title %}
+
 {% block content %}
-<h1>Agregar nuevo libro</h1>
 <p>Completa el formulario para agregar un nuevo libro a la biblioteca.</p>
 <hr>
 <form method="post" enctype="multipart/form-data">
@@ -16,7 +24,7 @@
 
     <!-- Botones alineados a la derecha -->
     <div class="d-flex justify-content-end mb-3">
-        <button type="submit" class="btn btn-dark btn-lg me-2">Enviar</button>
+        <button type="submit" class="btn btn-dark btn-lg me-2 border border-1 border-warning">Enviar</button>
         <a href="{% url 'libros:post_libros' %}" class="btn btn-danger btn-lg">Cancelar</a>
     </div>
 </form>

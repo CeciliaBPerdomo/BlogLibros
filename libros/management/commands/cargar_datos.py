@@ -13,6 +13,7 @@ media_root = Path(settings.MEDIA_ROOT)  # Aseguramos que la ruta sea un objeto P
 portada_libro1 = media_root / 'libros' / 'img' / 'cien.jpeg'
 portada_libro2 = media_root / 'libros' / 'img' / 'orgullo.jpg'
 portada_libro3 = media_root / 'libros' / 'img' / 'rosasyespinas.jpg'
+portada_libro5 = media_root / 'libros' / 'img' / 'nacida.png'
 
 class Command(BaseCommand):
     help = 'Carga autores, libros y reseñas de ejemplo'
@@ -68,7 +69,7 @@ class Command(BaseCommand):
 
         libro2, _ = Libro.objects.get_or_create(
             titulo='Orgullo y prejuicio',
-            descripcion='Una historia de amor y clase social en la Inglaterra del siglo XIX.',
+            descripcion='Orgullo y prejuicio (en inglés, Pride and Prejudice), publicada por primera vez el 28 de enero de 1813 como una obra anónima, es la más famosa de las novelas de Jane Austen y una de las primeras comedias románticas en la historia de la novela. Su primera frase es, además, una de las más famosas en la literatura inglesa: «Es una verdad mundialmente reconocida que un hombre soltero, poseedor de una gran fortuna, necesita una esposa». Es una novela de desarrollo personal, en la que las dos figuras principales, Elizabeth Bennet y Fitzwilliam Darcy, cada uno a su manera y, no obstante, de forma muy parecida, deben madurar para superar algunas crisis y aprender de sus errores para poder encarar el futuro en común, superando el orgullo de clase de Darcy y los prejuicios de Elizabeth hacia él. Es una de las obras más conocidas de la literatura inglesa, gracias a innumerables ediciones y, recientemente, a películas (como Orgullo y prejuicio, 2005), reescrita incluso en forma de un musical de Broadway.',
             autor_libro=autor2,
             fecha_publicacion=date(1813, 1, 28)
         )
@@ -87,6 +88,25 @@ class Command(BaseCommand):
         if portada_libro3.exists():
             with open(portada_libro3, 'rb') as f:
                 libro3.portada.save('rosasyespinas.jpg', File(f), save=True)
+
+        libro4, _ = Libro.objects.get_or_create(
+            titulo='Obsidian: Saga Lux 1',
+            descripcion='Una historia de amor y ciencia ficción llena de misterio y acción.',
+            autor_libro=autor4,
+            fecha_publicacion=date(2013, 12, 1)
+        )
+
+        libro5, _ = Libro.objects.get_or_create(
+            titulo='Nacida de sangre y cenizas',
+            descripcion='La línea entre el amor y la obsesión nunca ha sido tan amplia... Aunque Sera se ha liberado de las garras de Kolis y ha regresado con sus seres queridos, no todo está en calma. Los recuerdos todavía la atormentan, pero Sera, por fin, tiene esperanza en un futuro con la otra mitad de su corazón y de su alma. Nyktos desea, ama y acepta todas las partes de ella... incluso las más monstruosas. Sera y Ash tienen que luchar por todo lo que hay en los mundos, y Nyktos no tiene ninguna duda de que Sera puede ser la Reina de los Dioses. No obstante, ella debe tener fe en sí misma si quieren convencer a las otras cortes para que los apoyen contra Kolis, y poder hacer así de Iliseeum y del mundo mortal lugares mejores y más seguros para todos.',
+            autor_libro=autor4,
+            fecha_publicacion=date(2025, 3, 4)
+        )
+
+         # Asignar portada específica para el libro3
+        if portada_libro5.exists():
+            with open(portada_libro5, 'rb') as f:
+                libro5.portada.save('nacida.png', File(f), save=True)
 
         # Crear reseñas
         Resena.objects.get_or_create(

@@ -7,8 +7,11 @@ urlpatterns = [
     path('', views.index, name='index'),  # Página de inicio de libros
 
      # Libros
-    path('libros/', views.post_libros, name='post_libros'), 
-    path('libros/create', views.libros_create, name='libros_create'),  # Crear un nuevo libro
+    path('libros/', views.LibrosListView.as_view(), name='post_libros'),
+    path('libros/detail/<int:pk>/', views.LibrosDetailView.as_view(), name='libros_detail'), # Vista detallada de cada libro
+    path('libros/create', views.LibrosCreateView.as_view(), name='libros_create'),  # Crear un nuevo libro
+    path('libros/update/<int:pk>/', views.LibrosUpdateView.as_view(), name='libros_update'), # Vista para editar un libro
+    path('libros/delete/<int:pk>/', views.LibrosDeleteView.as_view(), name='libros_delete'), # Eliminar un libro
 
    # Autores    
     path('autores/', views.post_autores, name='post_autores'),

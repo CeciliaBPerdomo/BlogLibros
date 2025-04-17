@@ -1,0 +1,28 @@
+{% extends "libros/base.html" %}
+{% block title %} Eliminar {% endblock title %}
+
+{% block content_title %} 
+<h1 class="text-center">Eliminar libro</h1>
+{% endblock content_title %}
+
+{% block content %}
+<p class="fs-5 text-center">
+    ¿Está seguro de que desea eliminar el libro "<b>{{ object.titulo }}</b>"?
+</p>
+
+<p class="text-center">
+{% if libro.portada %}
+    <img class="rounded rounded-3" src="{{ object.portada.url }}" alt="{{ object.titulo }} portada" width="200px">
+{% else %}
+    <p>Portada no disponible</p>
+{% endif %}
+</p>
+
+<p class="fs-5 text-center">Esta acción no se puede deshacer.</p>
+<br>
+<form method="post" class="text-center">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="{% url 'libros:post_libros' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock content %}
