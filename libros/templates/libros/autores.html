@@ -1,0 +1,44 @@
+{% extends "libros/base.html" %}
+{% block title %}Autores{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between mb-4">
+    <div>
+        <h1>Lista de autores</h1>
+        <p>
+            Bienvenido a la sección de autores. Aquí puedes encontrar una lista de autores disponibles en nuestra
+            biblioteca.
+        </p>
+    </div>
+    <div class="mt-4">
+        <a href="{% url 'libros:autores_create' %}" class="btn btn-dark btn-lg">Agregar autor</a>
+    </div>
+</div>
+
+<form action="{% url 'libros:post_autores' %}" method="get">
+    <input type="text" name="busquedaAutor" placeholder="Buscar..." type="submit" class="form-control mb-3">
+</form>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Biografía</th>
+            <th>Fecha de Nacimiento</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for autor in autores %}
+        <tr>
+            <td>{{ autor.nombre }}</td>
+            <td>{{ autor.biografia }}</td>
+            <td>{{ autor.fecha_nacimiento|date:"d/m/Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No hay autores disponibles.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

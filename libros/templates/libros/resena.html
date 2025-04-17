@@ -1,0 +1,61 @@
+{% extends "libros/base.html" %}
+{% block title %}Reseñas{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between mb-4">
+    <div>
+        <h1>Reseñas</h1>
+        <p>
+            Bienvenido a la sección de reseñas. Aquí puedes encontrar una lista de reseñas sobre los libros de nuestra
+            bibilioteca.
+        </p>
+    </div>
+    <div class="mt-4">
+        <a href="{% url 'libros:resena_create' %}" class="btn btn-dark btn-lg">Escribir reseña</a>
+    </div>
+</div>
+
+<form action="{% url 'libros:post_resenas' %}" method="get">
+    <input type="text" name="busquedaResena" placeholder="Buscar..." type="submit" class="form-control mb-3">
+</form>
+
+<div class="row">
+    {% for resena in resenas %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <!-- Imagen del libro -->
+                <div class="d-flex mb-3">
+                    {% if resena.libro.portada %}
+                    <img src="{{ resena.libro.portada.url }}" alt="{{ resena.libro.titulo }}" class="img-fluid"
+                        style="max-width: 50px; max-height: 75px; margin-right: 10px;">
+                    {% else %}
+                    <img src="https://via.placeholder.com/50x75" alt="Portada no disponible" class="img-fluid"
+                        style="max-width: 50px; max-height: 75px; margin-right: 10px;">
+                    {% endif %}
+                    <div>
+                        <h5 class="card-title">{{ resena.titulo }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Por: {{ resena.usuario.username }} </h6>
+                        <h6 class="card-subtitle mb-2 text-muted"> Libro: {{ resena.libro.titulo }}</h6>
+                    </div>
+                </div>
+                <p class="card-text">{{ resena.contenido }}</p>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <p class="card-text">Puntuación:
+                    {% for i in resena.full_stars %}
+                    <span class="text-warning">&#9733;</span>
+                    {% endfor %}
+                    {% for i in resena.empty_stars %}
+                    <span class="text-muted">&#9733;</span>
+                    {% endfor %}
+                </p>
+                <p class="card-text text-end"><small class="text-muted">Fecha reseña: {{ resena.fecha|date:"d/m/Y H:i" }}</small></p>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>No hay reseñas disponibles.</p>
+    {% endfor %}
+</div>
+{% endblock %}

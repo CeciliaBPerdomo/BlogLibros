@@ -1,0 +1,37 @@
+{% extends "libros/base.html" %}
+{% block title %}Reseñas → Agregar reseñas{% endblock %}
+
+{% block content %}
+<h1>Agregar una nueva reseña</h1>
+<p>Completa el formulario para agregar una nueva reseña a la biblioteca.</p>
+<hr>
+
+<form method="post">
+    {% csrf_token %}
+
+    <!-- Estilizar el formulario -->
+    <div class="mb-3">
+        <table class="table">
+            {% for field in form %}
+                {% if field.name != 'libro' or not libro %}
+                <tr>
+                    <th>{{ field.label_tag }}</th>
+                    <td>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger">{{ field.errors }}</div>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- Botones alineados a la derecha -->
+    <div class="d-flex justify-content-end mb-3">
+        <button type="submit" class="btn btn-dark btn-lg me-2">Enviar</button>
+        <a href="{% url 'libros:post_resenas' %}" class="btn btn-danger btn-lg">Cancelar</a>
+    </div>
+</form>
+{% endblock %}

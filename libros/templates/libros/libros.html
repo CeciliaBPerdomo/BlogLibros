@@ -1,0 +1,57 @@
+{% extends "libros/base.html" %}
+{% block title %}Libros{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between mb-4">
+    <div>
+        <h1>Lista de libros</h1>
+        <p>
+            Bienvenido a la sección de libros. Aquí puedes encontrar una lista de libros disponibles en nuestra
+            biblioteca.
+        </p>
+    </div>
+    <div class="mt-4">
+        <a href="{% url 'libros:libros_create' %}" class="btn btn-dark btn-lg">Agregar libros</a>
+    </div>
+</div>
+<form action="{% url 'libros:post_libros' %}" method="get">
+    <input type="text" name="busqueda" placeholder="Buscar..." type="submit" class="form-control mb-3">
+</form>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Portada</th>
+            <th>Nombre del Libro</th>
+            <th>Autor</th>
+            <th>Fecha de Publicación</th>
+            <th>Descripción</th>
+            <!-- <th>Agregar tu reseña</th> -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for libro in libros %}
+        <tr>
+            <td class="text-center">
+                {% if libro.portada %}
+                <img src="{{ libro.portada.url }}" alt="{{ libro.titulo }} portada" width="50" height="75">
+                {% else %}
+                <p>No disponible</p>
+                {% endif %}
+            </td>
+            <td class="align-middle">{{ libro.titulo }}</td>
+            <td class="align-middle">{{ libro.autor_libro.nombre }}</td>
+            <td class="align-middle">{{ libro.fecha_publicacion }}</td>
+            <td class="align-middle">{{ libro.descripcion }}</td>
+            <!-- <td class="align-middle">
+                <a href="{% url 'libros:resena_create' libro.id %}" class="btn btn-dark btn-sm">Crear reseña</a>
+            </td> -->
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No hay libros disponibles.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

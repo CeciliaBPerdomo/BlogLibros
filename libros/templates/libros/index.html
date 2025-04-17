@@ -1,0 +1,61 @@
+{% extends "libros/base.html" %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+  <h1>Bienvenid@s a mi blog de libros</h1>
+  <p>Descubre libros, autores y más.</p>
+
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <!-- Card 1: Libros -->
+    <div class="col">
+      <div class="card h-100">
+        <img src="https://www.revistaesfinge.com/wp-content/uploads/2016/03/a837e119cd945083823082e324cfb9ef.jpg" 
+        class="card-img-top" alt="Libros" height="270px">
+        <div class="card-body">
+          <h5 class="card-title">Libros</h5>
+          <p class="card-text">
+            Descubre una amplia variedad de libros de diferentes géneros, desde clásicos hasta novedades.
+          </p>
+        </div>
+        <div class="card-footer text-center">
+          <a href="{% url 'libros:post_libros' %}" class="btn btn-dark w-50">Ver Libros</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Autores -->
+    <div class="col">
+      <div class="card h-100">
+        <img src="https://vsd.mx/_next/image?url=https%3A%2F%2Fadmin.vsd.mx%2Fwp-content%2Fuploads%2F2023%2F04%2FLos-autores-mas-reconocidos-para-celebrar-el-Dia-del-Libro.png&w=1080&q=75" 
+        class="card-img-top" alt="Autores" height="270px">
+        <div class="card-body">
+          <h5 class="card-title">Autores</h5>
+          <p class="card-text">
+            Conoce a los autores que han dejado una huella imborrable en el mundo literario.
+          </p>
+        </div>
+        <div class="card-footer text-center">
+          <a href="{% url 'libros:post_autores' %}" class="btn btn-dark w-50">Ver Autores</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Reseñas -->
+    <div class="col">
+      <div class="card h-100">
+        <img src="https://www.educaciontrespuntocero.com/wp-content/uploads/2020/01/903499__classical-literature_p-978x652.jpg" 
+        class="card-img-top" alt="Reseñas" height="270px">
+        <div class="card-body">
+          <h5 class="card-title">Reseñas</h5>
+          <p class="card-text">
+            Lee las reseñas de los libros que han sido leídos y comentados por nuestros usuarios.
+          </p>
+        </div>
+        <div class="card-footer text-center">
+          <a href="{% url 'libros:post_resenas' %}" class="btn btn-dark w-50">Ver Reseñas</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
