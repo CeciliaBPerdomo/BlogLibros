@@ -1,0 +1,20 @@
+{% extends "libros/base.html" %}
+{% block title %} Eliminar {% endblock title %}
+
+{% block content_title %} 
+<h1 class="text-center">Eliminar reseña</h1>
+{% endblock content_title %}
+
+{% block content %}
+<p class="fs-5 text-center">
+    ¿Está seguro de que desea eliminar la reseña "<b>{{ object.titulo }}</b>"?, sobre el libro "<b>{{ object.libro.titulo }}</b>".
+</p>
+<p class="fs-5 text-center text-danger">Esta acción no se puede deshacer.</p>
+
+<br>
+<form method="post" class="text-center">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="{% url 'libros:post_resenas' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock content %}

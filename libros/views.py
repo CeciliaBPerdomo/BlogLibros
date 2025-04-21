@@ -193,6 +193,33 @@ def post_resenas(request):
 
     return render(request, 'libros/resena.html', context={'resenas': post_resenas})
 
+class ResenaListView(ListView):
+    model = Resena
+    template_name = 'libros/resena.html'
+    context_object_name = 'resenas'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        busqueda = self.request.GET.get('busquedaResena', None)
+        if busqueda:
+            queryset = queryset.filter(titulo__icontains=busqueda)
+        # Agregar estrellas como en la función basada en vista
+        for resena in queryset:
+            resena.full_stars = [1] * resena.puntuacion
+            resena.empty_stars = [1] * (5 - resena.puntuacion)
+        return queryset
+
+class ResenaDetailView(DetailView):
+    model = Resena
+    template_name = 'libros/resena_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        resena = self.get_object()
+        context['object'].full_stars = [1] * resena.puntuacion
+        context['object'].empty_stars = [1] * (5 - resena.puntuacion)
+        return context
+
 def resena_create(request, libro_id=None):
     libro = None
     if libro_id:
@@ -216,3 +243,38 @@ def resena_create(request, libro_id=None):
         'form': form,
         'libro': libro,
     })
+
+class ResenaCreateView(CreateView):
+    model = Resena
+    template_name = 'libros/resena_create.html'
+    form_class = ResenaForm
+    success_url = reverse_lazy('libros:post_resenas')  # Redirigir a la lista de publicaciones después de crear una
+
+    def form_valid(self, form):
+        if self.request.user.is_authenticated:
+            print(self.request.user)
+            form.instance.usuario = self.request.user
+        else:
+            form.add_error(None, "Debes iniciar sesión para agregar una reseña.")
+            return self.form_invalid(form)
+        return super().form_valid(form)
+
+class ResenaUpdateView(UpdateView):
+    model = Resena
+    form_class = ResenaForm
+    template_name = 'libros/resena_create.html'
+    success_url = reverse_lazy('libros:post_resenas')
+
+    def form_valid(self, form):
+        if self.request.user.is_authenticated:
+            form.instance.usuario = self.request.user
+        else:
+            form.add_error(None, "Debes iniciar sesión para actulizar una reseña.")
+            return self.form_invalid(form)
+        return super().form_valid(form)
+
+
+class ResenaDeleteView(DeleteView):
+    model = Resena
+    template_name = 'libros/resena_confirm_delete.html'
+    success_url = reverse_lazy('libros:post_resenas')

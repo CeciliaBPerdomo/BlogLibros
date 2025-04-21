@@ -1,9 +1,20 @@
 {% extends "libros/base.html" %}
-{% block title %}Reseñas → Agregar reseñas{% endblock %}
+{% block title %}Reseñas → {% if form.instance.pk %} Editar reseña{% else %}Agregar reseña{% endif %}{% endblock %}
+
+{% block content_title %}
+    {% if form.instance.pk %}
+        <h1>Editar reseña</h1>
+    {% else %}
+        <h1>Agregar una nueva reseña</h1>
+    {% endif %}
+{% endblock content_title %}
 
 {% block content %}
-<h1>Agregar una nueva reseña</h1>
-<p>Completa el formulario para agregar una nueva reseña a la biblioteca.</p>
+    {% if form.instance.pk %}
+        <p>Completa el formulario para editar una reseña de la biblioteca.</p>
+    {% else %}
+        <p>Completa el formulario para agregar una nueva reseña a la biblioteca.</p>
+    {% endif %}
 <hr>
 
 <form method="post">
@@ -13,17 +24,17 @@
     <div class="mb-3">
         <table class="table">
             {% for field in form %}
-                {% if field.name != 'libro' or not libro %}
-                <tr>
-                    <th>{{ field.label_tag }}</th>
-                    <td>
-                        {{ field }}
-                        {% if field.errors %}
-                            <div class="text-danger">{{ field.errors }}</div>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endif %}
+            {% if field.name != 'libro' or not libro %}
+            <tr>
+                <th>{{ field.label_tag }}</th>
+                <td>
+                    {{ field }}
+                    {% if field.errors %}
+                    <div class="text-danger">{{ field.errors }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
             {% endfor %}
         </table>
     </div>

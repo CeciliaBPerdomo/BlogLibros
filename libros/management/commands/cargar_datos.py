@@ -121,7 +121,7 @@ class Command(BaseCommand):
             libro=libro2,
             usuario=usuario,
             titulo='Un clásico imprescindible',
-            contenido='La ironía y la crítica social de Austen son brillantes.',
+            contenido='La ironía y la crítica social de Austen son brillantes. "Orgullo y Prejuicio" es una obra encantadora que mezcla romance con una crítica sutil a la sociedad inglesa del siglo XIX. Jane Austen logra construir personajes memorables, especialmente Elizabeth Bennet, con una inteligencia y carácter que destacan en cada página. La evolución de su relación con Darcy es fascinante de seguir. Le resto una estrella solo porque algunas partes pueden sentirse lentas en ritmo para lectores actuales, pero en general es una lectura brillante y muy disfrutable.',
             puntuacion=4
         )
 

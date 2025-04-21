@@ -1,0 +1,42 @@
+{% extends "libros/base.html" %}
+{% block title %}Reseñas → Detalles{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="mb-3">
+        <div class="card text-center">
+            <div class="card-header">
+                <h3>
+                    <b>{{ object.libro.titulo }}</b> de {{ object.libro.autor_libro.nombre }}
+                </h3>
+            </div>
+            <div class="card-body">
+                <img src="{{ object.libro.portada.url }}" alt="{{ object.libro.titulo }}" class="img-fluid rounded-4 mb-2" 
+                style="width: 150px; height: 225px;">
+                <h5 class="card-title">{{ object.titulo }}, por {{ object.usuario }}</h5>
+                <p class="card-text">{{ object.contenido }}</p>
+                <div class="d-flex justify-content-center mt-4 mb-2">
+                    <p class="card-text">
+                        <strong>
+                        Puntuación:
+                        {% for i in object.full_stars %}
+                        <span class="text-warning">&#9733;</span>
+                        {% endfor %}
+                        {% for i in object.empty_stars %}
+                        <span class="text-muted">&#9733;</span>
+                        {% endfor %}
+                    </strong>
+                    </p>
+                </div>
+            </div>
+            <div class="card-footer text-body-secondary text-end">
+                Reseñado el: <b>{{ object.fecha }}</b>
+            </div>
+        </div>
+    </div>
+    <!-- Este botón siempre quedará al final -->
+    <div class="d-flex justify-content-end mt-auto mb-4">
+        <a href="{% url 'libros:post_resenas' %}" class="btn btn-light border-1 border-secondary w-25">← Volver</a>
+    </div>
+</div>
+{% endblock %}

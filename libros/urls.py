@@ -21,7 +21,10 @@ urlpatterns = [
     path('autores/delete/<int:pk>/', views.AutoresDeleteView.as_view(), name='autores_delete'), # Eliminar un autor
 
     # Reseñas
-    path('resenas/', views.post_resenas, name='post_resenas'),
-    path('resenas/create', views.resena_create, name='resena_create'),  # Crear una nueva reseña
-    path('resenas/create/<int:libro_id>/', views.resena_create, name='resena_create'),
+    path('resenas/', views.ResenaListView.as_view(), name='post_resenas'), # Listar reseñas
+    path('resenas/create/', views.ResenaCreateView.as_view(), name='resena_create'), # Crear una nueva reseña
+    path('resenas/create/<int:libro_id>/', views.ResenaCreateView.as_view(), name='resena_create_por_libro'), # Crear una reseña para un libro específico
+    path('resenas/<int:pk>/', views.ResenaDetailView.as_view(), name='resena_detail'), # Vista detallada de cada reseña
+    path('resenas/update/<int:pk>/', views.ResenaUpdateView.as_view(), name='resena_update'), # Vista para editar una reseña
+    path('resenas/delete/<int:pk>/', views.ResenaDeleteView.as_view(), name='resena_delete'), # Eliminar una reseña
 ]
