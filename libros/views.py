@@ -88,7 +88,6 @@ class LibrosUpdateView(UpdateView):
             return self.form_invalid(form)
         return super().form_valid(form)
 
-
 class LibrosDeleteView(DeleteView):
     model = Libro
     template_name = 'libros/libros_confirm_delete.html'
@@ -96,6 +95,8 @@ class LibrosDeleteView(DeleteView):
 
 ###########################################################################################################################################
 ## Vista autores
+###########################################################################################################################################
+
 def post_autores(request):
     # Obtener el valor de la búsqueda desde la URL
     busqueda = request.GET.get('busquedaAutor', None)
@@ -106,6 +107,18 @@ def post_autores(request):
         post_autores = AutorLibro.objects.all()
     return render(request, 'libros/autores.html', context={'autores': post_autores})
 
+class AutoresListView(ListView):
+    model = AutorLibro
+    template_name = 'libros/autores.html'
+    context_object_name = 'autores'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        busqueda = self.request.GET.get('busqueda', None)
+        if busqueda:
+            queryset = queryset.filter(nombre__icontains=busqueda)
+        return queryset
+    
 def autores_create(request):
     # Lógica para crear un libro
     if request.method == 'POST':
@@ -123,8 +136,47 @@ def autores_create(request):
         form = AutorLibroForm()
     return render(request, 'libros/autores_create.html', context={'form': form})
 
+class AutoresCreateView(CreateView):
+    model = AutorLibro
+    template_name = 'libros/autores_create.html'
+    form_class = AutorLibroForm
+    success_url = reverse_lazy('libros:post_autores')  # Redirigir a la lista de publicaciones después de crear una
+
+    def form_valid(self, form):
+        if self.request.user.is_authenticated:
+            form.instance.autor = self.request.user
+        else:
+            form.add_error(None, "Debes iniciar sesión para agregar un libro.")
+            return self.form_invalid(form)
+        return super().form_valid(form)
+
+# Vista para mostrar los detalles de un autor
+class AutoresDetailView(DetailView):
+    model = AutorLibro
+    template_name = 'libros/autores_detail.html'
+
+class AutoresUpdateView(UpdateView):
+    model = AutorLibro
+    form_class = AutorLibroForm
+    template_name = 'libros/autores_create.html'
+    success_url = reverse_lazy('libros:post_autores')  # Redirigir a la lista de publicaciones después de actualizar una
+
+    def form_valid(self, form):
+        if self.request.user.is_authenticated:
+            form.instance.autor = self.request.user
+        else:
+            form.add_error(None, "Debes iniciar sesión para agregar un libro.")
+            return self.form_invalid(form)
+        return super().form_valid(form)
+
+class AutoresDeleteView(DeleteView):
+    model = AutorLibro
+    template_name = 'libros/autores_confirm_delete.html'
+    success_url = reverse_lazy('libros:post_autores') 
+
 ###########################################################################################################################################
 ## Vista reseñas
+###########################################################################################################################################
 def post_resenas(request):
     # Obtener el valor de la búsqueda desde la URL
     busqueda = request.GET.get('busquedaResena', None)

@@ -1,0 +1,38 @@
+{% extends "libros/base.html" %}
+{% block title %}Autores → Detalles{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column justify-content-between" style="min-height: 90vh;">  <!-- Esto asegura que ocupe casi toda la pantalla -->
+    <div>
+        <div class="d-flex justify-content-between mb-4">
+            <h1 class="text-warning">{{ object.nombre }}</h1>
+        </div>
+        <p>Nació el <b>{{ object.fecha_nacimiento }}</b>.</p>
+        <p>{{ object.biografia }}</p>
+
+        <h4 class="mt-5">Sus libros:</h4>
+        <div class="row">
+            {% for libro in object.libros.all %}
+            <div class="col-md-4 mb-3">
+                <div class="card border-0">
+                    {% if libro.portada %}
+                    <img src="{{ libro.portada.url }}" alt="{{ libro.titulo }}"
+                        style="height: 350px; width: 100%; object-fit: contain;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title text-center">{{ libro.titulo }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>Este autor no tiene libros registrados.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Este botón siempre quedará al final -->
+    <div class="d-flex justify-content-end mt-auto mb-4">
+        <a href="{% url 'libros:post_autores' %}" class="btn btn-light border-1 border-secondary w-25">← Volver</a>
+    </div>
+</div>
+{% endblock %}

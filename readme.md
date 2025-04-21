@@ -1,5 +1,5 @@
 <h1 align="center">Mi blog de libros</h1>
-<p align="center"><img src="myAvatar.png" style="width: 50%"></p>
+<p align="center"><img src="myAvatar.png" width: "40%"></p>
 <p align="center">by <b>Cecilia 💛 Perdomo</b></p>
 
 
@@ -26,7 +26,7 @@
 - Imágenes para libros: `pip install Pillow`
 
 ## Test 
-- para correr el test de blog: `python manage.py test blog`
+- para correr el test de blog: `python manage.py test libros`
 
 ## Borrar el .venv
 - `git rm -r --cached .venv`

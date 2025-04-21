@@ -11,7 +11,11 @@
 {% endblock content_title %}
 
 {% block content %}
-<p>Completa el formulario para agregar un nuevo libro a la biblioteca.</p>
+    {% if form.instance.pk %}
+        <p>Completa el formulario para editar un libro a la biblioteca.</p>
+    {% else %}
+        <p>Completa el formulario para agregar un nuevo libro a la biblioteca.</p>
+    {% endif %}
 <hr>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}

@@ -6,7 +6,7 @@
     <div>
         <h1>Lista de autores</h1>
         <p>
-            Bienvenido a la sección de autores. Aquí puedes encontrar una lista de autores disponibles en nuestra
+            Bienvenid@ a la sección de autores. Aquí puedes encontrar una lista de los <b>autores</b> disponibles en nuestra
             biblioteca.
         </p>
     </div>
@@ -16,23 +16,27 @@
 </div>
 
 <form action="{% url 'libros:post_autores' %}" method="get">
-    <input type="text" name="busquedaAutor" placeholder="Buscar..." type="submit" class="form-control mb-3">
+    <input type="text" name="busquedaAutor" placeholder="Buscar..." type="submit" class="form-control mb-3 w-75 mx-auto">
 </form>
 
-<table class="table table-bordered">
+<table class="table table-bordered w-75 mx-auto">
     <thead>
         <tr>
-            <th>Nombre</th>
-            <th>Biografía</th>
-            <th>Fecha de Nacimiento</th>
+            <th class="align-middle text-center">Nombre</th>
+            <th class="align-middle text-center">Fecha de Nacimiento</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         {% for autor in autores %}
         <tr>
-            <td>{{ autor.nombre }}</td>
-            <td>{{ autor.biografia }}</td>
-            <td>{{ autor.fecha_nacimiento|date:"d/m/Y" }}</td>
+            <td class="align-middle text-center">{{ autor.nombre }}</td>
+            <td class="align-middle text-center">{{ autor.fecha_nacimiento|date:"d/m/Y" }}</td>
+            <td class="align-middle text-center">
+                <a class="btn btn-outline-info" href="{% url 'libros:autores_detail' autor.id %}"><i class="fa fa-eye"></i></a>
+                <a class="btn btn-outline-warning" href="{% url 'libros:autores_update' autor.id %}"><i class="fa fa-pen"></i></a>
+                <a class="btn btn-outline-danger" href="{% url 'libros:autores_delete' autor.id %}"><i class="fa fa-trash"></i></a>
+            </td>
         </tr>
         {% empty %}
         <tr>

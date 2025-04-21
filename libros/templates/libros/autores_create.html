@@ -1,24 +1,37 @@
 {% extends "libros/base.html" %}
 {% block title %}Autores → Agregar autor{% endblock %}
 
+
+{% block content_title %} 
+    {% if form.instance.pk %}
+        <h1>Editar autor</h1>
+    {% else %}
+        <h1>Agregar nuevo autor</h1>
+    {% endif %}
+{% endblock content_title %}
+
 {% block content %}
-<h1>Agregar nuevo autor</h1>
-<p>Completa el formulario para agregar un nuevo autor a la biblioteca.</p>
-<hr>
+    {% if form.instance.pk %}
+        <p>Completa el formulario para editar un autor de la biblioteca.</p>
+    {% else %}
+        <p>Completa el formulario para agregar un nuevo autor a la biblioteca.</p>
+    {% endif %}
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <!-- Estilizar el formulario -->
-    <div class="mb-3">
-        <table class="table">
-            {{ form.as_table }}
-        </table>
-    </div>
+    <hr>
 
-    <!-- Botones alineados a la derecha -->
-    <div class="d-flex justify-content-end mb-3">
-        <button type="submit" class="btn btn-dark btn-lg me-2 border border-1 border-warning">Enviar</button>
-        <a href="{% url 'libros:post_autores' %}" class="btn btn-danger btn-lg">Cancelar</a>
-    </div>
-</form>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- Estilizar el formulario -->
+        <div class="mb-3">
+            <table class="table">
+                {{ form.as_table }}
+            </table>
+        </div>
+
+        <!-- Botones alineados a la derecha -->
+        <div class="d-flex justify-content-end mb-3">
+            <button type="submit" class="btn btn-dark btn-lg me-2 border border-1 border-warning">Enviar</button>
+            <a href="{% url 'libros:post_autores' %}" class="btn btn-danger btn-lg">Cancelar</a>
+        </div>
+    </form>
 {% endblock %}

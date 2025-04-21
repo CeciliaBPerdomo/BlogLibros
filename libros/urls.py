@@ -14,8 +14,11 @@ urlpatterns = [
     path('libros/delete/<int:pk>/', views.LibrosDeleteView.as_view(), name='libros_delete'), # Eliminar un libro
 
    # Autores    
-    path('autores/', views.post_autores, name='post_autores'),
-    path('autores/create', views.autores_create, name='autores_create'),  # Crear un nuevo autor
+    path('autores/', views.AutoresListView.as_view(), name='post_autores'),
+    path('autores/create', views.AutoresCreateView.as_view(), name='autores_create'),  # Crear un nuevo autor
+    path('autores/detail/<int:pk>/', views.AutoresDetailView.as_view(), name='autores_detail'), # Vista detallada de cada autor
+    path('autores/update/<int:pk>/', views.AutoresUpdateView.as_view(), name='autores_update'), # Vista para editar un autor
+    path('autores/delete/<int:pk>/', views.AutoresDeleteView.as_view(), name='autores_delete'), # Eliminar un autor
 
     # Reseñas
     path('resenas/', views.post_resenas, name='post_resenas'),

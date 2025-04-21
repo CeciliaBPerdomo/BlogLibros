@@ -1,0 +1,24 @@
+{% extends "libros/base.html" %}
+{% block title %} Eliminar {% endblock title %}
+
+{% block content_title %} 
+<h1 class="text-center">Eliminar autor</h1>
+{% endblock content_title %}
+
+{% block content %}
+<p class="fs-5 text-center">
+    ¿Está seguro de que desea eliminar el autor "<b>{{ object.nombre }}</b>"?
+</p>
+
+<p class="fs-5 text-center">
+    Esta acción eliminará todos los libros relacionados con este autor.
+</p>
+<p class="fs-5 text-center text-danger">Esta acción no se puede deshacer.</p>
+
+<br>
+<form method="post" class="text-center">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="{% url 'libros:post_autores' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock content %}
