@@ -16,7 +16,6 @@ def index(request):
 ###########################################################################################################################################
 ## Libros
 ###########################################################################################################################################
-
 # Vista para mostrar todos los libros o por busqueda realizada
 def post_libros(request):
     # Obtener el valor de la búsqueda desde la URL
@@ -40,7 +39,6 @@ class LibrosListView(ListView):
         if busqueda:
             queryset = queryset.filter(titulo__icontains=busqueda)
         return queryset
-
 
 # Vista para mostrar los detalles de un libro
 class LibrosDetailView(DetailView):
@@ -103,7 +101,6 @@ class LibrosDeleteView(DeleteView):
 ###########################################################################################################################################
 ## Vista autores
 ###########################################################################################################################################
-
 # Vista para mostrar todos los autores o por busqueda realizada
 def post_autores(request):
     # Obtener el valor de la búsqueda desde la URL
@@ -297,7 +294,6 @@ class ResenaDeleteView(DeleteView):
 ###########################################################################################################################################
 ## Perfil
 ###########################################################################################################################################
-
 # Vista para mostrar el perfil del usuario
 @login_required
 def perfil(request):
