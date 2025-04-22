@@ -47,6 +47,7 @@ class LibrosDetailView(DetailView):
     model = Libro
     template_name = 'libros/libros_detail.html'
 
+# Vista para crear un nuevo libro
 def libros_create(request):
     # Lógica para crear un libro
     if request.method == 'POST':
@@ -78,6 +79,7 @@ class LibrosCreateView(CreateView):
             return self.form_invalid(form)
         return super().form_valid(form)
 
+# Vista para editar un libro
 class LibrosUpdateView(UpdateView):
     model = Libro
     form_class = LibroForm
@@ -92,6 +94,7 @@ class LibrosUpdateView(UpdateView):
             return self.form_invalid(form)
         return super().form_valid(form)
 
+# Vista para eliminar un libro
 class LibrosDeleteView(DeleteView):
     model = Libro
     template_name = 'libros/libros_confirm_delete.html'
@@ -101,6 +104,7 @@ class LibrosDeleteView(DeleteView):
 ## Vista autores
 ###########################################################################################################################################
 
+# Vista para mostrar todos los autores o por busqueda realizada
 def post_autores(request):
     # Obtener el valor de la búsqueda desde la URL
     busqueda = request.GET.get('busquedaAutor', None)
@@ -122,7 +126,8 @@ class AutoresListView(ListView):
         if busqueda:
             queryset = queryset.filter(nombre__icontains=busqueda)
         return queryset
-    
+
+# Vista para crear un autor  
 def autores_create(request):
     # Lógica para crear un libro
     if request.method == 'POST':
@@ -159,6 +164,7 @@ class AutoresDetailView(DetailView):
     model = AutorLibro
     template_name = 'libros/autores_detail.html'
 
+# Vista para editar un autor
 class AutoresUpdateView(UpdateView):
     model = AutorLibro
     form_class = AutorLibroForm
@@ -173,6 +179,7 @@ class AutoresUpdateView(UpdateView):
             return self.form_invalid(form)
         return super().form_valid(form)
 
+# Vista para eliminar un autor
 class AutoresDeleteView(DeleteView):
     model = AutorLibro
     template_name = 'libros/autores_confirm_delete.html'
@@ -181,6 +188,7 @@ class AutoresDeleteView(DeleteView):
 ###########################################################################################################################################
 ## Vista reseñas
 ###########################################################################################################################################
+# Vista para mostrar todas las reseñas o por busqueda realizada
 def post_resenas(request):
     # Obtener el valor de la búsqueda desde la URL
     busqueda = request.GET.get('busquedaResena', None)
@@ -213,6 +221,7 @@ class ResenaListView(ListView):
             resena.empty_stars = [1] * (5 - resena.puntuacion)
         return queryset
 
+# Vista para mostrar los detalles de una reseña
 class ResenaDetailView(DetailView):
     model = Resena
     template_name = 'libros/resena_detail.html'
@@ -224,6 +233,7 @@ class ResenaDetailView(DetailView):
         context['object'].empty_stars = [1] * (5 - resena.puntuacion)
         return context
 
+# Vista para crear una reseña
 def resena_create(request, libro_id=None):
     libro = None
     if libro_id:
@@ -263,6 +273,7 @@ class ResenaCreateView(CreateView):
             return self.form_invalid(form)
         return super().form_valid(form)
 
+# Vista para editar una reseña
 class ResenaUpdateView(UpdateView):
     model = Resena
     form_class = ResenaForm
@@ -277,7 +288,7 @@ class ResenaUpdateView(UpdateView):
             return self.form_invalid(form)
         return super().form_valid(form)
 
-
+# Vista para eliminar una reseña
 class ResenaDeleteView(DeleteView):
     model = Resena
     template_name = 'libros/resena_confirm_delete.html'
@@ -286,6 +297,8 @@ class ResenaDeleteView(DeleteView):
 ###########################################################################################################################################
 ## Perfil
 ###########################################################################################################################################
+
+# Vista para mostrar el perfil del usuario
 @login_required
 def perfil(request):
     usuario = request.user
@@ -295,6 +308,7 @@ def perfil(request):
         'resenas': resenas,
     })
 
+# Vista para editar el perfil del usuario
 @login_required
 def editar_perfil(request):
     if request.method == 'POST':
@@ -322,6 +336,7 @@ def editar_perfil(request):
             avatar_form = AvatarForm()
     return render(request, 'libros/perfil_editar.html', {'form': form, 'avatar_form': avatar_form})
 
+# Vista para cerrar la sesión del perfil del usuario
 def cerrar_sesion(request):
     logout(request)
     return redirect('libros:index')

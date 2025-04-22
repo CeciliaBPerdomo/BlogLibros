@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 from django.db.models import Avg
 
 # Create your models here.
-# Autor del libro 
+###########################################################################################################################################
+## Autores
+###########################################################################################################################################
 class AutorLibro(models.Model):
     nombre = models.CharField(max_length=100)
     biografia = models.TextField(blank=True)
@@ -12,8 +14,9 @@ class AutorLibro(models.Model):
     def __str__(self):
         return self.nombre
 
-
-# Libro
+###########################################################################################################################################
+## Libros
+###########################################################################################################################################
 class Libro(models.Model):
     titulo = models.CharField(max_length=200)
     descripcion = models.TextField()
@@ -28,7 +31,9 @@ class Libro(models.Model):
         promedio = self.resenas.aggregate(Avg('puntuacion'))['puntuacion__avg']
         return round(promedio or 0)
 
-# Reseña del libro
+###########################################################################################################################################
+## Reseñas
+###########################################################################################################################################
 class Resena(models.Model):
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE, related_name='resenas')
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -39,8 +44,10 @@ class Resena(models.Model):
 
     def __str__(self):
         return f'{self.usuario.username} reseñó {self.libro.titulo}'
-
-# Avatar del usuario
+    
+###########################################################################################################################################
+## Avatares
+###########################################################################################################################################
 class Avatar(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     imagen = models.ImageField(upload_to='libros/avatares/', null=True, blank=True)
