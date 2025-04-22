@@ -1,5 +1,9 @@
 from django import forms
-from .models import Libro, AutorLibro, Resena
+from .models import Libro, AutorLibro, Resena, Avatar
+
+# Par editar el formulario de usuario
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.models import User
 
 class LibroForm(forms.ModelForm):
     class Meta:
@@ -99,3 +103,69 @@ class ResenaForm(forms.ModelForm):
             }
         }
         
+class EditUserForm(UserChangeForm):
+    username = forms.CharField(
+        required=True,
+        label='Nombre de usuario',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre de usuario'})
+    )
+    email = forms.EmailField(
+        required=True,
+        label='Correo electrónico',
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Correo electrónico'})
+    )
+    first_name = forms.CharField(
+        required=True,
+        label='Nombre',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre'})
+    )
+    last_name = forms.CharField(
+        required=True,
+        label='Apellido',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Apellido'})
+    )
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'password']
+        widgets = {
+            'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña'}),
+        }
+        error_messages = {
+            'username': {
+                'required': 'Este campo es obligatorio.',
+                'max_length': 'El nombre de usuario no puede exceder los 150 caracteres.'
+            },
+            'email': {
+                'required': 'Este campo es obligatorio.',
+                'invalid': 'Ingrese un correo electrónico válido.'
+            },
+            'first_name': {
+                'required': 'Este campo es obligatorio.',
+                'max_length': 'El nombre no puede exceder los 30 caracteres.'
+            },
+            'last_name': {
+                'required': 'Este campo es obligatorio.',
+                'max_length': 'El apellido no puede exceder los 150 caracteres.'
+            },
+            'password': {
+                'required': 'Este campo es obligatorio.'
+            }
+        }
+
+class AvatarForm(forms.ModelForm):
+    class Meta:
+        model = Avatar
+        fields = ['imagen']
+        widgets = {
+            'imagen': forms.ClearableFileInput(attrs={'class': 'form-control', 'type': 'file'}),
+        }
+        labels = {
+            'imagen': 'Imagen de perfil',
+        }
+        error_messages = {
+            'imagen': {
+                'invalid': 'Formato de imagen no válido.',
+                'invalid_image': 'La imagen no es válida.'
+            }
+        }

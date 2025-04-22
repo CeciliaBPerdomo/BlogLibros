@@ -1,0 +1,71 @@
+{% extends "libros/base.html" %}
+{% block title %}Perfil{% endblock %}
+
+{% block content %}
+<div class="container mt-2">
+    <div class="d-flex justify-content-between mb-1">
+        <div>
+            <h1>Perfil de <b class="text-warning">{{ user.first_name|default:user.username }}</b></h1>
+            <p>Bienvenid@ a tu perfil. Aquí puedes ver toda tu información personal.</p>
+        </div>
+    </div>
+    <div class="d-flex justify-content-start mb-2">
+    <table class="table table-bordered table-hover w-50">
+        <tbody>
+          <tr>
+            <th scope="row">Nombre de usuario</th>
+            <td>{{ user.username }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Nombre</th>
+            <td>{{ user.first_name }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Apellido</th>
+            <td>{{ user.last_name }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Email</th>
+            <td>{{ user.email }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mb-4">
+        <h3>Tus reseñas</h3>
+        {% if resenas %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            {% for resena in resenas %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        {% if resena.libro.portada %}
+                            <img src="{{ resena.libro.portada.url }}" class="card-img-top" 
+                            alt="Portada de {{ resena.libro.titulo }}" style="height: 120px; object-fit: cover;">
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ resena.titulo }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ resena.libro.titulo }}</h6>
+                            <p class="mb-1 text-end">
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= resena.puntuacion %}
+                                        <span class="text-warning">★</span>
+                                    {% else %}
+                                        <span class="text-secondary">☆</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </p>
+                            <p class="card-text flex-grow-1">{{ resena.contenido|truncatechars:100 }}</p>
+                        </div>
+                        <div class="card-footer text-muted small text-end">
+                            {{ resena.fecha|date:"d/m/Y H:i" }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No has escrito ninguna reseña todavía.</p>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

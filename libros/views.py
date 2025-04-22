@@ -1,9 +1,13 @@
 # libros/views.py 
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Libro, AutorLibro, Resena
-from .forms import LibroForm, AutorLibroForm, ResenaForm
+from .models import Libro, AutorLibro, Resena, Avatar
+from .forms import LibroForm, AutorLibroForm, ResenaForm, EditUserForm, AvatarForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+
+# Usuario
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 # Create your views here.
 def index(request):
@@ -278,3 +282,46 @@ class ResenaDeleteView(DeleteView):
     model = Resena
     template_name = 'libros/resena_confirm_delete.html'
     success_url = reverse_lazy('libros:post_resenas')
+
+###########################################################################################################################################
+## Perfil
+###########################################################################################################################################
+@login_required
+def perfil(request):
+    usuario = request.user
+    resenas = Resena.objects.filter(usuario=usuario).select_related('libro')
+    return render(request, 'libros/perfil.html', {
+        'user': usuario,
+        'resenas': resenas,
+    })
+
+@login_required
+def editar_perfil(request):
+    if request.method == 'POST':
+        form = EditUserForm(request.POST, instance=request.user)
+        try:
+            avatar = request.user.avatar
+        except Avatar.DoesNotExist:
+            avatar = None
+        
+        if avatar:
+            avatar_form = AvatarForm(request.POST, request.FILES, instance=avatar)
+        else: 
+            avatar_form = AvatarForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            avatar_instance = avatar_form.save(commit=False)
+            avatar_instance.user = request.user
+            avatar_instance.save()
+            return redirect('libros:perfil')
+    else:   
+        form = EditUserForm(instance=request.user)
+        if hasattr(request.user, 'avatar'):
+            avatar_form = AvatarForm(instance=request.user.avatar)
+        else:
+            avatar_form = AvatarForm()
+    return render(request, 'libros/perfil_editar.html', {'form': form, 'avatar_form': avatar_form})
+
+def cerrar_sesion(request):
+    logout(request)
+    return redirect('libros:index')

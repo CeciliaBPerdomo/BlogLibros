@@ -27,4 +27,9 @@ urlpatterns = [
     path('resenas/<int:pk>/', views.ResenaDetailView.as_view(), name='resena_detail'), # Vista detallada de cada reseña
     path('resenas/update/<int:pk>/', views.ResenaUpdateView.as_view(), name='resena_update'), # Vista para editar una reseña
     path('resenas/delete/<int:pk>/', views.ResenaDeleteView.as_view(), name='resena_delete'), # Eliminar una reseña
+
+    # Perfiles de usuario
+    path('perfil/', views.perfil, name='perfil'), # Vista del perfil del usuario
+    path('editar_perfil/', views.editar_perfil, name='editar_perfil'), # Editar perfil del usuario
+    path('logout/', views.cerrar_sesion, name='logout'), # Cerrar sesión
 ]

@@ -39,3 +39,11 @@ class Resena(models.Model):
 
     def __str__(self):
         return f'{self.usuario.username} reseñó {self.libro.titulo}'
+
+# Avatar del usuario
+class Avatar(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to='libros/avatares/', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.imagen}"

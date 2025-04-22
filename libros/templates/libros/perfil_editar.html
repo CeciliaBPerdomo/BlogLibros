@@ -1,0 +1,33 @@
+{% extends "libros/base.html" %}
+{% block title %}Perfil{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" class="w-50 mx-auto">
+    {% csrf_token %}
+    <table class="table table-bordered align-middle">
+        <tbody>
+            {% for field in form %}
+            <tr>
+                <th class="w-25 text-end pe-3 align-middle">
+                    <label for="{{ field.id_for_label }}" class="form-label mb-0">{{ field.label }}</label>
+                </th>
+                <td>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <div class="form-text">{{ field.help_text }}</div>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+            {{ avatar_form.as_table }}
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-dark">Guardar cambios</button>
+    </div>
+</form>
+{% endblock %}
