@@ -1,0 +1,42 @@
+{% extends "libros/base.html" %}
+{% block title %}Acerca de mí{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div>
+        <h1>Acerca de mí</h1>
+        <p>Bienvenid@ a la sección de <strong>Acerca de mí</strong>. Aquí puedes encontrar información sobre mí y mis
+            intereses.</p>
+    </div>
+    <div class="row border border-1 border-info rounded-3 p-3 mb-4 mt-3">
+        <div class="col-md-5 d-flex justify-content-center align-items-center">
+            <img src="../../../media/libros/avatares/myAvatar.png" alt="Cecilia Perdomo"
+                class="img-fluid rounded-circle mb-3">
+        </div>
+        <div class="col-md-7">
+            <h3>Acerca de mí</h3>
+            <p>¡Hola! Soy <b>Cecilia</b>, creadora de este blog de libros. Me encanta leer y compartir mis pensamientos
+                sobre lo que leo.</p>
+
+            <p>Desde chica los libros fueron mis compañeros fieles, y con el tiempo se convirtieron en una parte
+                esencial de quién soy. Leer me permite viajar, cuestionar y descubrir nuevas formas de ver el mundo.</p>
+            <p>Además de leer, disfruto escribir reseñas sinceras, charlar con otras lectoras y lectores, y formar
+                comunidad a través de nuestras historias compartidas.</p>
+            <p>Mi objetivo con este blog es crear un rincón cálido, donde cada persona que ame los libros sienta que
+                pertenece. Si alguna vez un libro te cambió la vida, este es tu lugar.</p>
+            <h4>Mis 3 libros favoritos</h4>
+            <ul>
+                <li><i>Una corte de rosas y espinas</i> - Sarah J. Mass</li>
+                <li><i>De sangre y cenizas</i> - Jennifer L. Armentrout</li>
+                <li><i>Emma</i> - Jane Austen</li>
+            </ul>
+
+            <h4>Una frase que me representa</h4>
+            <blockquote style="font-style: italic; border-left: 4px solid #ffc107; padding-left: 1rem; color: #555;">
+              “Soy la roca contra la que rompe el oleaje. Nada puede quebrarme.”<br>
+              — Sarah J. Maas
+            </blockquote>
+        </div>
+    </div>
+</div>
+{% endblock %}

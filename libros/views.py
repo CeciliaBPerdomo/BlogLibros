@@ -13,6 +13,9 @@ from django.contrib.auth import logout
 def index(request):
     return render(request, 'libros/index.html')
 
+def about(request):
+    return render(request, 'libros/about_me.html')
+
 ###########################################################################################################################################
 ## Libros
 ###########################################################################################################################################

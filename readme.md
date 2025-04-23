@@ -33,3 +33,6 @@
 - `git commit -m "Eliminando venv del índice de Git"`
 - `git add .gitignore`
 - `git commit -m "Actualizando .gitignore"`
+
+# Generar los requerimientos
+- `pip freeze > requirements.txt`

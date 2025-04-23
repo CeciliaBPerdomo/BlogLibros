@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),  # Página de inicio de libros
+    path('about_me/', views.about, name='about_me'),  # Página "Sobre mí"
 
     ###########################################################################################################################################
     ## Libros
