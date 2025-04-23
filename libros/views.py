@@ -1,13 +1,13 @@
 # libros/views.py 
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Libro, AutorLibro, Resena, Avatar
-from .forms import LibroForm, AutorLibroForm, ResenaForm, EditUserForm, AvatarForm
+from .models import Libro, AutorLibro, Resena, Avatar, Perfil
+from .forms import LibroForm, AutorLibroForm, ResenaForm, EditUserForm, AvatarForm, CustomLoginForm, RegistroUsuarioForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 # Usuario
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate, login
 
 # Create your views here.
 def index(request):
@@ -295,7 +295,7 @@ class ResenaDeleteView(DeleteView):
     success_url = reverse_lazy('libros:post_resenas')
 
 ###########################################################################################################################################
-## Perfil
+## Usuarios
 ###########################################################################################################################################
 # Vista para mostrar el perfil del usuario
 @login_required
@@ -312,6 +312,15 @@ def perfil(request):
 def editar_perfil(request):
     if request.method == 'POST':
         form = EditUserForm(request.POST, instance=request.user)
+
+        try:
+            perfil = request.user.perfil
+            form.initial['fecha_cumple'] = perfil.fecha_cumple
+            form.initial['biografia'] = perfil.biografia
+            form.initial['libro_favorito'] = perfil.libro_favorito
+        except Perfil.DoesNotExist:
+            pass
+        
         try:
             avatar = request.user.avatar
         except Avatar.DoesNotExist:
@@ -321,14 +330,36 @@ def editar_perfil(request):
             avatar_form = AvatarForm(request.POST, request.FILES, instance=avatar)
         else: 
             avatar_form = AvatarForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
+        
+        if form.is_valid() and avatar_form.is_valid():
+            # Guardar la información del usuario
+            user = form.save()
+            
+            # Guardar los datos adicionales del perfil
+            perfil, creado = Perfil.objects.get_or_create(user=user)
+            perfil.fecha_cumple = form.cleaned_data.get('fecha_cumple')
+            perfil.biografia = form.cleaned_data.get('biografia')
+            perfil.libro_favorito = form.cleaned_data.get('libro_favorito')
+            perfil.save()
+            
+            # Guardar el avatar si está presente
             avatar_instance = avatar_form.save(commit=False)
             avatar_instance.user = request.user
             avatar_instance.save()
+            
             return redirect('libros:perfil')
-    else:   
+    else:
         form = EditUserForm(instance=request.user)
+
+        try:
+            perfil = request.user.perfil
+            form.initial['fecha_cumple'] = perfil.fecha_cumple.strftime('%Y-%m-%d') if perfil.fecha_cumple else ''
+            form.initial['biografia'] = perfil.biografia
+            form.initial['libro_favorito'] = perfil.libro_favorito
+        except Perfil.DoesNotExist:
+            pass
+        
+        # Buscar el avatar si existe
         if hasattr(request.user, 'avatar'):
             avatar_form = AvatarForm(instance=request.user.avatar)
         else:
@@ -337,5 +368,36 @@ def editar_perfil(request):
 
 # Vista para cerrar la sesión del perfil del usuario
 def cerrar_sesion(request):
-    logout(request)
+    if request.user.is_authenticated:  # Verificar si el usuario está autenticado
+        logout(request)
     return redirect('libros:index')
+
+# Vista para loguearse
+def login_view(request):
+    if request.method == 'POST':
+        form = CustomLoginForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('index')  # Redirigir a la página principal después del login
+    else:
+        form = CustomLoginForm()
+
+    return render(request, 'libros/perfil_login.html', {'form': form})
+
+# Registro de usuario
+def registro(request):
+    if request.method == 'POST':
+        form = RegistroUsuarioForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Crear perfil vacío si lo estás usando
+            Perfil.objects.create(user=user)
+            login(request, user)  # inicia sesión automáticamente
+            return redirect('libros:perfil')  # o donde quieras redirigir
+    else:
+        form = RegistroUsuarioForm()
+    return render(request, 'libros/perfil_registro.html', {'form': form})

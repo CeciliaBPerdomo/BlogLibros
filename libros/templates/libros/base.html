@@ -73,6 +73,10 @@
                 <li><a class="dropdown-item text-danger" href="{% url 'libros:logout' %}">Cerrar sesión</a></li>
               </ul>
             </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link text-warning fw-bold" href="{% url 'libros:login' %}">Iniciar sesión</a>
+            </li>
           {% endif %}
         </ul>
       </div>

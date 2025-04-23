@@ -41,4 +41,7 @@ urlpatterns = [
     path('perfil/', views.perfil, name='perfil'), # Vista del perfil del usuario
     path('editar_perfil/', views.editar_perfil, name='editar_perfil'), # Editar perfil del usuario
     path('logout/', views.cerrar_sesion, name='logout'), # Cerrar sesión
+    path('login/', views.login_view, name='login'), # Iniciar sesión
+    path('registro/', views.registro, name='registro'), # Registro de usuario
+
 ]

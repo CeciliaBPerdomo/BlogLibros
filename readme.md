@@ -28,11 +28,18 @@
 ## Test 
 - para correr el test de blog: `python manage.py test libros`
 
-## Borrar el .venv
-- `git rm -r --cached .venv`
-- `git commit -m "Eliminando venv del índice de Git"`
-- `git add .gitignore`
-- `git commit -m "Actualizando .gitignore"`
+## Borrar archivos / carpetas de github
+- .venv
+    - `git rm -r --cached .venv`
+    - `git commit -m "Eliminando venv del índice de Git"`
+    - `git add .gitignore`
+    - `git commit -m "Actualizando .gitignore"`
+- db.sqlite3
+    - `git rm --cached db.sqlite3`
+    - `git commit -m "Agregar db.sqlite3 al .gitignore`
+- __pycache__
+    - `git rm -r --cached libros/__pycache__ proyecto/__pycache__ libros/management/commands/__pycache__ libros/migrations/__pycache__`
+    - `git commit -m "Eliminar __pycache__ del repositorio y agregarlo al .gitignore"`
 
-# Generar los requerimientos
+## Requerimientos
 - `pip freeze > requirements.txt`

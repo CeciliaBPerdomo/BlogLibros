@@ -1,8 +1,8 @@
 from django import forms
-from .models import Libro, AutorLibro, Resena, Avatar
+from .models import Libro, AutorLibro, Resena, Avatar, Perfil
 
 # Par editar el formulario de usuario
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserChangeForm, AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 
 ###########################################################################################################################################
@@ -136,9 +136,25 @@ class EditUserForm(UserChangeForm):
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Apellido'})
     )
 
+    fecha_cumple = forms.DateField(
+        required=False,
+        label='Fecha de cumpleaños',
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+    )
+    biografia = forms.CharField(
+        required=False,
+        label='Biografía',
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4})
+    )
+    libro_favorito = forms.CharField(
+        required=False,
+        label='Libro favorito',
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'password']
+        fields = ['username', 'email', 'first_name', 'last_name', 'password', 'fecha_cumple', 'biografia', 'libro_favorito']
         widgets = {
             'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña'}),
         }
@@ -163,6 +179,63 @@ class EditUserForm(UserChangeForm):
                 'required': 'Este campo es obligatorio.'
             }
         }
+    
+    def save(self, commit=True):
+        user = super().save(commit)
+        perfil, creado = Perfil.objects.get_or_create(user=user)
+        perfil.fecha_cumple = self.cleaned_data.get('fecha_cumple')
+        perfil.biografia = self.cleaned_data.get('biografia')
+        perfil.libro_favorito = self.cleaned_data.get('libro_favorito')
+        if commit:
+            perfil.save()
+        return user
+
+# Login de usuarios
+class CustomLoginForm(AuthenticationForm):
+    username = forms.CharField(
+        required=True,
+        label='Usuario:',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre de usuario'})
+    )
+    password = forms.CharField(
+        required=True,
+        label="Contraseña:",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña'}), 
+    )
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+
+# Registro de usuarios
+class RegistroUsuarioForm(UserCreationForm):
+    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Correo electrónico',
+    }))
+    first_name = forms.CharField(label='Nombre', widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Nombre'
+    }))
+    last_name = forms.CharField(label='Apellido', widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Apellido'
+    }))
+    password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Contraseña'
+    }))
+    password2 = forms.CharField(label='Repetir contraseña', widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Repetir contraseña'
+    }))
+    username = forms.CharField(label='Nombre de usuario', widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Nombre de usuario'
+    }))
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 
 ###########################################################################################################################################
 ## Avatares

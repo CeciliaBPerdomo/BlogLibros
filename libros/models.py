@@ -44,10 +44,20 @@ class Resena(models.Model):
 
     def __str__(self):
         return f'{self.usuario.username} reseñó {self.libro.titulo}'
+
+
+###########################################################################################################################################
+## Perfil de usuario
+###########################################################################################################################################
+class Perfil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    fecha_cumple = models.DateField(null=True, blank=True)
+    biografia = models.TextField(blank=True, max_length=500)
+    libro_favorito = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return f"Perfil de {self.user.username}"
     
-###########################################################################################################################################
-## Avatares
-###########################################################################################################################################
 class Avatar(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     imagen = models.ImageField(upload_to='libros/avatares/', null=True, blank=True)
