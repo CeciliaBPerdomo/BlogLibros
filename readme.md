@@ -55,7 +55,7 @@ def test_validar_puntuacion_invalida(self):
     with self.assertRaises(ValidationError):
         resena.full_clean()  # Esto ejecuta la validación
 ```
-### **Libro**
+#### **Libro**
 El modelo `Libro` tiene una relación con el modelo `AutorLibro` y se utiliza para almacenar información sobre los libros disponibles en la plataforma. Las pruebas incluyen la validación del cálculo del promedio de las puntuaciones de las reseñas de un libro.
 
 #### **Promedio de Puntuación**
