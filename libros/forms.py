@@ -9,6 +9,11 @@ from django.contrib.auth.models import User
 ## Libros
 ###########################################################################################################################################
 class LibroForm(forms.ModelForm):
+    fecha_publicacion = forms.DateField(
+        required=True,
+        label='Fecha de publicación',
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+    )
     class Meta:
         model = Libro	
         fields = ['titulo', 'descripcion', 'autor_libro', 'fecha_publicacion', 'portada']
@@ -16,7 +21,6 @@ class LibroForm(forms.ModelForm):
             'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Título del libro'}),
             'descripcion': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Descripción del libro'}),
             'autor_libro': forms.Select(attrs={'class': 'form-select'}),
-            'fecha_publicacion': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'portada': forms.ClearableFileInput(attrs={'class': "form-control", 'type': "file"}),
         }
         labels = {

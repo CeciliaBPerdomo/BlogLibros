@@ -11,10 +11,14 @@
             bibilioteca.
         </p>
     </div>
+
+    {% if user.is_authenticated %}
     <div class="mt-4">
-        <a href="{% url 'libros:resena_create' %}" class="btn btn-dark btn-lg border border-1 border-warning">Escribir
-            reseña</a>
+        <a href="{% url 'libros:resena_create' %}" class="btn btn-dark btn-lg border border-1 border-warning">
+            Escribir reseña
+        </a>
     </div>
+    {% endif %}
 </div>
 
 <form action="{% url 'libros:post_resenas' %}" method="get">
@@ -61,12 +65,14 @@
                     <a class="btn btn-outline-info" href="{% url 'libros:resena_detail' resena.id %}">
                         <i class="fa fa-eye"></i>
                     </a>
-                    <a class="btn btn-outline-warning mx-1" href="{% url 'libros:resena_update' resena.id %}">
-                        <i class="fa fa-pen"></i>
-                    </a>
-                    <a class="btn btn-outline-danger" href="{% url 'libros:resena_delete' resena.id %}">
-                        <i class="fa fa-trash"></i>
-                    </a>
+                    {% if user.is_authenticated %}
+                        <a class="btn btn-outline-warning mx-1" href="{% url 'libros:resena_update' resena.id %}">
+                            <i class="fa fa-pen"></i>
+                        </a>
+                        <a class="btn btn-outline-danger" href="{% url 'libros:resena_delete' resena.id %}">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>

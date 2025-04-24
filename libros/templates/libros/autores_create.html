@@ -1,5 +1,11 @@
 {% extends "libros/base.html" %}
-{% block title %}Autores → Agregar autor{% endblock %}
+{% block title %}
+    {% if form.instance.pk %}
+        Autores → Editar autor
+    {% else %}
+        Autores → Agregar autor
+    {% endif %}
+{% endblock %}
 
 
 {% block content_title %} 

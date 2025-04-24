@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AutorLibro, Libro, Resena
+from .models import AutorLibro, Libro, Resena, Avatar, Perfil 
 
 # Personalización de la vista de AutorLibro
 @admin.register(AutorLibro)
@@ -21,3 +21,15 @@ class ResenaAdmin(admin.ModelAdmin):
     list_display = ('libro', 'usuario', 'puntuacion', 'fecha')
     list_filter = ('puntuacion', 'fecha')
     search_fields = ('libro__titulo', 'usuario__username')
+
+@admin.register(Perfil)
+class PerfilAdmin(admin.ModelAdmin):
+    list_display = ('user', 'fecha_cumple', 'libro_favorito')
+    search_fields = ('user__username', 'libro_favorito')
+
+
+@admin.register(Avatar)
+class AvatarAdmin(admin.ModelAdmin):
+    list_display = ('user', 'imagen')
+    search_fields = ('user__username',)
+    list_filter = ('user',)

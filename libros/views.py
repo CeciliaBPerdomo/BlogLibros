@@ -4,6 +4,8 @@ from .models import Libro, AutorLibro, Resena, Avatar, Perfil
 from .forms import LibroForm, AutorLibroForm, ResenaForm, EditUserForm, AvatarForm, CustomLoginForm, RegistroUsuarioForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.dateformat import format as date_format
 
 # Usuario
 from django.contrib.auth.decorators import login_required
@@ -49,6 +51,7 @@ class LibrosDetailView(DetailView):
     template_name = 'libros/libros_detail.html'
 
 # Vista para crear un nuevo libro
+@login_required
 def libros_create(request):
     # Lógica para crear un libro
     if request.method == 'POST':
@@ -66,7 +69,7 @@ def libros_create(request):
         form = LibroForm()
     return render(request, 'libros/libros_create.html', context={'form': form})
 
-class LibrosCreateView(CreateView):
+class LibrosCreateView(LoginRequiredMixin, CreateView):
     model = Libro
     template_name = 'libros/libros_create.html'
     form_class = LibroForm
@@ -81,11 +84,18 @@ class LibrosCreateView(CreateView):
         return super().form_valid(form)
 
 # Vista para editar un libro
-class LibrosUpdateView(UpdateView):
+class LibrosUpdateView(LoginRequiredMixin, UpdateView):
     model = Libro
     form_class = LibroForm
     template_name = 'libros/libros_create.html'
     success_url = reverse_lazy('libros:post_libros')  # Redirigir a la lista de publicaciones después de actualizar una
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # Establecer el valor inicial del campo de fecha con el formato correcto para input type="date"
+        if self.object.fecha_publicacion:
+            form.initial['fecha_publicacion'] = date_format(self.object.fecha_publicacion, 'Y-m-d')
+        return form
 
     def form_valid(self, form):
         if self.request.user.is_authenticated:
@@ -96,7 +106,7 @@ class LibrosUpdateView(UpdateView):
         return super().form_valid(form)
 
 # Vista para eliminar un libro
-class LibrosDeleteView(DeleteView):
+class LibrosDeleteView(LoginRequiredMixin, DeleteView):
     model = Libro
     template_name = 'libros/libros_confirm_delete.html'
     success_url = reverse_lazy('libros:post_libros') 
@@ -122,12 +132,13 @@ class AutoresListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        busqueda = self.request.GET.get('busqueda', None)
+        busqueda = self.request.GET.get('busquedaAutor', None)
         if busqueda:
             queryset = queryset.filter(nombre__icontains=busqueda)
         return queryset
 
 # Vista para crear un autor  
+@login_required
 def autores_create(request):
     # Lógica para crear un libro
     if request.method == 'POST':
@@ -145,7 +156,7 @@ def autores_create(request):
         form = AutorLibroForm()
     return render(request, 'libros/autores_create.html', context={'form': form})
 
-class AutoresCreateView(CreateView):
+class AutoresCreateView(LoginRequiredMixin, CreateView):
     model = AutorLibro
     template_name = 'libros/autores_create.html'
     form_class = AutorLibroForm
@@ -165,11 +176,21 @@ class AutoresDetailView(DetailView):
     template_name = 'libros/autores_detail.html'
 
 # Vista para editar un autor
-class AutoresUpdateView(UpdateView):
+class AutoresUpdateView(LoginRequiredMixin, UpdateView):
     model = AutorLibro
     form_class = AutorLibroForm
     template_name = 'libros/autores_create.html'
     success_url = reverse_lazy('libros:post_autores')  # Redirigir a la lista de publicaciones después de actualizar una
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        try:
+            autor = self.get_object()  # Obtén el autor a editar
+            # Establecer el valor inicial de la fecha de nacimiento en el formato correcto
+            form.initial['fecha_nacimiento'] = autor.fecha_nacimiento.strftime('%Y-%m-%d') if autor.fecha_nacimiento else ''
+        except AutorLibro.DoesNotExist:
+            pass
+        return form
 
     def form_valid(self, form):
         if self.request.user.is_authenticated:
@@ -180,7 +201,7 @@ class AutoresUpdateView(UpdateView):
         return super().form_valid(form)
 
 # Vista para eliminar un autor
-class AutoresDeleteView(DeleteView):
+class AutoresDeleteView(LoginRequiredMixin, DeleteView):
     model = AutorLibro
     template_name = 'libros/autores_confirm_delete.html'
     success_url = reverse_lazy('libros:post_autores') 
@@ -234,6 +255,7 @@ class ResenaDetailView(DetailView):
         return context
 
 # Vista para crear una reseña
+@login_required
 def resena_create(request, libro_id=None):
     libro = None
     if libro_id:
@@ -258,7 +280,7 @@ def resena_create(request, libro_id=None):
         'libro': libro,
     })
 
-class ResenaCreateView(CreateView):
+class ResenaCreateView(LoginRequiredMixin, CreateView):
     model = Resena
     template_name = 'libros/resena_create.html'
     form_class = ResenaForm
@@ -274,7 +296,7 @@ class ResenaCreateView(CreateView):
         return super().form_valid(form)
 
 # Vista para editar una reseña
-class ResenaUpdateView(UpdateView):
+class ResenaUpdateView(LoginRequiredMixin, UpdateView):
     model = Resena
     form_class = ResenaForm
     template_name = 'libros/resena_create.html'
@@ -289,7 +311,7 @@ class ResenaUpdateView(UpdateView):
         return super().form_valid(form)
 
 # Vista para eliminar una reseña
-class ResenaDeleteView(DeleteView):
+class ResenaDeleteView(LoginRequiredMixin, DeleteView):
     model = Resena
     template_name = 'libros/resena_confirm_delete.html'
     success_url = reverse_lazy('libros:post_resenas')
@@ -397,7 +419,7 @@ def registro(request):
             # Crear perfil vacío si lo estás usando
             Perfil.objects.create(user=user)
             login(request, user)  # inicia sesión automáticamente
-            return redirect('libros:perfil')  # o donde quieras redirigir
+            return redirect('index') 
     else:
         form = RegistroUsuarioForm()
     return render(request, 'libros/perfil_registro.html', {'form': form})
