@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Avg
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 ###########################################################################################################################################
@@ -30,6 +31,7 @@ class Libro(models.Model):
     def promedio_puntuacion(self):
         promedio = self.resenas.aggregate(Avg('puntuacion'))['puntuacion__avg']
         return round(promedio or 0)
+    
 
 ###########################################################################################################################################
 ## Reseñas
@@ -44,6 +46,11 @@ class Resena(models.Model):
 
     def __str__(self):
         return f'{self.usuario.username} reseñó {self.libro.titulo}'
+    
+    def clean(self):
+        # Validar la puntuación
+        if self.puntuacion < 1 or self.puntuacion > 5:
+            raise ValidationError('La puntuación debe estar entre 1 y 5.')
 
 
 ###########################################################################################################################################
