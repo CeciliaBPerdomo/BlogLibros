@@ -1,0 +1,38 @@
+{% extends "libros/base.html" %}
+{% block title %}Conversación{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Conversación con 
+        {% for participante in conversacion.participantes.all %}
+            {% if participante != request.user %}
+                <span class="text-warning">{{ participante.username }}</span>
+            {% endif %}
+        {% endfor %}
+    </h2>
+
+    <div class="border rounded p-3 mb-4" style="max-height: 400px; overflow-y: auto; background-color: #f8f9fa;">
+        {% for mensaje in mensajes %}
+            <div class="mb-3 {% if mensaje.remitente == request.user %}text-end{% endif %}">
+                De: <strong>{{ mensaje.remitente.username }}</strong><br>
+                <span class="badge bg-light text-dark">Mensaje: <strong>{{ mensaje.texto }}</strong></span><br>
+                <small class="text-muted">Fecha: {{ mensaje.creado_en|date:"d/m/Y H:i" }}</small>
+            </div>
+        {% empty %}
+            <p class="text-muted">No hay mensajes aún.</p>
+        {% endfor %}
+    </div>
+
+    <form method="post" class="d-flex">
+        {% csrf_token %}
+        <input type="text" name="mensaje" class="form-control me-2" placeholder="Escribe un mensaje..." required>
+        <button type="submit" class="btn btn-dark">Enviar</button>
+    </form>
+
+    <div class="d-flex justify-content-end mb-4 mt-4">
+        <a href="{% url 'libros:lista_conversaciones' %}" class="btn btn-light border-1 border-secondary w-25">
+            ← Volver a conversaciones
+        </a>
+    </div>
+</div>
+{% endblock %}

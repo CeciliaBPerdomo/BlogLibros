@@ -44,4 +44,11 @@ urlpatterns = [
     path('login/', views.login_view, name='login'), # Iniciar sesión
     path('registro/', views.registro, name='registro'), # Registro de usuario
 
+    ###########################################################################################################################################
+    ## Mensajes
+    ###########################################################################################################################################
+    path('conversaciones/', views.lista_conversaciones, name='lista_conversaciones'),
+    path('conversacion/<int:conversacion_id>/', views.conversacion, name='conversacion'),
+    path('nueva-conversacion/<int:usuario_id>/', views.nueva_conversacion, name='nueva_conversacion'),
+    path('mensajes/seleccionar/', views.seleccionar_usuario_conversacion, name='seleccionar_usuario_conversacion'),
 ]

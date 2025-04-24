@@ -64,3 +64,24 @@ class Avatar(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.imagen}"
+    
+# Conversación entre dos usuarios o más
+class Conversacion(models.Model):
+    participantes = models.ManyToManyField(User)
+    creado_en = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Conversación entre {', '.join([usuario.username for usuario in self.participantes.all()])}"
+
+# Mensaje dentro de una conversación
+class Mensaje(models.Model):
+    conversacion = models.ForeignKey(Conversacion, related_name='mensajes', on_delete=models.CASCADE)
+    remitente = models.ForeignKey(User, on_delete=models.CASCADE)
+    texto = models.TextField()
+    creado_en = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Mensaje de {self.remitente.username} en {self.conversacion}"
+
+    class Meta:
+        ordering = ['creado_en']

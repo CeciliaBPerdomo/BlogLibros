@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AutorLibro, Libro, Resena, Avatar, Perfil 
+from .models import AutorLibro, Libro, Resena, Avatar, Perfil, Conversacion, Mensaje
 
 # Personalización de la vista de AutorLibro
 @admin.register(AutorLibro)
@@ -33,3 +33,19 @@ class AvatarAdmin(admin.ModelAdmin):
     list_display = ('user', 'imagen')
     search_fields = ('user__username',)
     list_filter = ('user',)
+
+@admin.register(Conversacion)
+class ConversacionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'mostrar_participantes', 'creado_en')
+    ordering = ('creado_en',)
+    list_filter = ('creado_en',)
+
+    def mostrar_participantes(self, obj):
+        return ", ".join([usuario.username for usuario in obj.participantes.all()])
+    mostrar_participantes.short_description = 'Participantes'
+
+@admin.register(Mensaje)
+class MensajeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'remitente', 'texto', 'creado_en')
+    ordering = ('creado_en',)
+    list_filter = ('remitente', 'creado_en')

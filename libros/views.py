@@ -1,15 +1,17 @@
 # libros/views.py 
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Libro, AutorLibro, Resena, Avatar, Perfil
+from django.http import JsonResponse
+from .models import Libro, AutorLibro, Resena, Avatar, Perfil, Mensaje, Conversacion
 from .forms import LibroForm, AutorLibroForm, ResenaForm, EditUserForm, AvatarForm, CustomLoginForm, RegistroUsuarioForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.dateformat import format as date_format
 
 # Usuario
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.models import User
 
 # Create your views here.
 def index(request):
@@ -423,3 +425,41 @@ def registro(request):
     else:
         form = RegistroUsuarioForm()
     return render(request, 'libros/perfil_registro.html', {'form': form})
+
+###########################################################################################################################################
+## Mensajes
+###########################################################################################################################################
+# Obtener todas las conversaciones donde el usuario está participando
+@login_required
+def lista_conversaciones(request):
+    conversaciones = Conversacion.objects.filter(participantes=request.user)
+    return render(request, 'libros/conversaciones_libros.html', {'conversaciones': conversaciones})
+
+# Obtener la conversación y los mensajes asociados
+@login_required
+def conversacion(request, conversacion_id):
+    conversacion = Conversacion.objects.get(id=conversacion_id)
+    if request.user not in conversacion.participantes.all():
+        return redirect('libros:lista_conversaciones')  # Si el usuario no está en la conversación, redirigir
+
+    mensajes = conversacion.mensajes.all()
+    if request.method == 'POST':
+        texto = request.POST['mensaje']
+        Mensaje.objects.create(conversacion=conversacion, remitente=request.user, texto=texto)
+        return redirect('libros:conversacion', conversacion_id=conversacion.id)
+
+    return render(request, 'libros/conversacion.html', {'conversacion': conversacion, 'mensajes': mensajes})
+
+# Crear una nueva conversación con otro usuario
+@login_required
+def nueva_conversacion(request, usuario_id):
+    usuario = User.objects.get(id=usuario_id)
+    conversacion = Conversacion.objects.create()
+    conversacion.participantes.add(request.user, usuario)
+    conversacion.save()
+    return redirect('libros:conversacion', conversacion_id=conversacion.id)
+
+@login_required
+def seleccionar_usuario_conversacion(request):
+    usuarios = User.objects.exclude(id=request.user.id)
+    return render(request, 'libros/conversaciones_seleccionar_usuario.html', {'usuarios': usuarios})

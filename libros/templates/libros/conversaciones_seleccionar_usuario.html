@@ -1,0 +1,18 @@
+{% extends "libros/base.html" %}
+{% block title %}Iniciar conversación{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Elegí un usuario para iniciar una conversación</h2>
+    <ul class="list-group mt-3">
+        {% for usuario in usuarios %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ usuario.username }}
+                <a href="{% url 'libros:nueva_conversacion' usuario.id %}" class="btn btn-sm btn-primary">
+                    Iniciar conversación
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

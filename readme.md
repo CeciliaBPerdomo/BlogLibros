@@ -16,14 +16,25 @@
     - Para borrar toda la base de datos: `rm db.sqlite3`
 - **Para cargar info por defecto**: `python manage.py cargar_datos`
 
+## Mensajeria
+Para crear una aplicación de mensajería donde los usuarios puedan comunicarse entre sí, vamos a dividirla en varias partes clave:
+
+- **Modelo de Datos** (Base de Datos):
+    - **Usuarios**: sistema de autenticación estándar de Django.
+    - **Mensajes**: Crear un modelo para los mensajes, que estará vinculado a los usuarios.
+    - **Conversaciones**: Se pueden tener conversaciones entre dos usuarios o grupos de usuarios.
+- **Vistas y Rutas**:
+    - **Lista de Conversaciones**: Los usuarios verán una lista de todas las conversaciones que han tenido.
+    - **Vista de Mensajes**: Cada conversación tendrá una vista donde los usuarios pueden ver y enviar nuevos mensajes.
+
 ## Servidor
 - Para activar el entorno virtual: 
     - `python -m venv .venv`
     - `.venv\Scripts\activate`
 - Levanta el servidor: `python manage.py runserver`
 
-## Instalaciones necesarias
-- Imágenes para libros: `pip install Pillow`
+## Instalaciones
+- **Imágenes** para libros y avatares: `pip install Pillow`
 
 ## Test 
 - para correr el test de blog: `python manage.py test libros`
