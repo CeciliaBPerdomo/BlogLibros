@@ -1,3 +1,4 @@
+# proyecto --> settings.py
 from pathlib import Path
 import os
 
@@ -108,4 +109,4 @@ LOGIN_REDIRECT_URL = 'index'  # Donde redirigir después de un login exitoso
 LOGOUT_REDIRECT_URL = 'index'  # Donde redirigir después de un logout
 
 DEBUG = True
-#ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
